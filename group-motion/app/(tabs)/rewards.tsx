@@ -1,56 +1,94 @@
-import { View, Text, StyleSheet, FlatList, Image } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import { useState } from 'react';
+import { View, StyleSheet, FlatList } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { ThemedText } from '@/components/ThemedText';
+import { Colors } from '@/constants/Colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { FontAwesome5 } from '@expo/vector-icons';
 
-interface NFT {
+interface Reward {
   id: string;
-  name: string;
+  title: string;
   description: string;
-  imageUrl: string;
-  earnedDate: string;
+  date: string;
+  type: 'nft' | 'badge';
+}
+
+const mockRewards: Reward[] = [
+  {
+    id: '1',
+    title: 'Pushup Master NFT',
+    description: 'Completed the Pushup Challenge at London Bridge',
+    date: '2024-03-15',
+    type: 'nft',
+  },
+  {
+    id: '2',
+    title: 'Kindness Champion NFT',
+    description: 'Completed the Kindness Challenge at New Cross',
+    date: '2024-03-14',
+    type: 'nft',
+  },
+  {
+    id: '3',
+    title: 'Early Bird Badge',
+    description: 'Completed 5 challenges in the morning',
+    date: '2024-03-13',
+    type: 'badge',
+  },
+];
+
+function RewardCard({ reward }: { reward: Reward }) {
+  return (
+    <LinearGradient
+      colors={['#6C5CE7', '#45AAF2']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.rewardCard}>
+      <View style={styles.rewardIcon}>
+        <FontAwesome5
+          name={reward.type === 'nft' ? 'medal' : 'award'}
+          size={24}
+          color="#FFD700"
+        />
+      </View>
+      <View style={styles.rewardContent}>
+        <ThemedText style={styles.rewardTitle}>{reward.title}</ThemedText>
+        <ThemedText style={styles.rewardDescription}>
+          {reward.description}
+        </ThemedText>
+        <ThemedText style={styles.rewardDate}>
+          Earned on {new Date(reward.date).toLocaleDateString()}
+        </ThemedText>
+      </View>
+    </LinearGradient>
+  );
 }
 
 export default function RewardsScreen() {
-  const [nfts, setNfts] = useState<NFT[]>([
-    {
-      id: '1',
-      name: 'Pushup Master',
-      description: 'Completed 10 pushups challenge',
-      imageUrl: 'https://via.placeholder.com/150',
-      earnedDate: '2024-03-23',
-    },
-    {
-      id: '2',
-      name: 'Kindness Champion',
-      description: 'Completed kindness challenge',
-      imageUrl: 'https://via.placeholder.com/150',
-      earnedDate: '2024-03-22',
-    },
-  ]);
-
-  const renderNFT = ({ item }: { item: NFT }) => (
-    <View style={styles.nftCard}>
-      <Image source={{ uri: item.imageUrl }} style={styles.nftImage} />
-      <View style={styles.nftInfo}>
-        <Text style={styles.nftName}>{item.name}</Text>
-        <Text style={styles.nftDescription}>{item.description}</Text>
-        <Text style={styles.earnedDate}>Earned: {item.earnedDate}</Text>
-      </View>
-      <FontAwesome name="trophy" size={24} color="#FFD700" style={styles.trophyIcon} />
-    </View>
-  );
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Your Rewards</Text>
-        <Text style={styles.subtitle}>{nfts.length} NFTs earned</Text>
-      </View>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <FlatList
-        data={nfts}
-        renderItem={renderNFT}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
+        data={mockRewards}
+        ListHeaderComponent={() => (
+          <LinearGradient
+            colors={['#6C5CE7', '#45AAF2']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.header}>
+            <ThemedText style={styles.headerTitle}>Your Rewards</ThemedText>
+            <ThemedText style={styles.headerSubtitle}>
+              Collect NFTs and badges by completing challenges!
+            </ThemedText>
+          </LinearGradient>
+        )}
+        renderItem={({ item }) => <RewardCard reward={item} />}
+        contentContainerStyle={[
+          styles.listContainer,
+          { paddingBottom: insets.bottom + 90 },
+        ]}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
@@ -59,66 +97,63 @@ export default function RewardsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: Colors.light.background,
   },
   header: {
-    padding: 16,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    padding: 24,
+    paddingBottom: 32,
+    borderRadius: 24,
+    marginBottom: 16,
   },
-  title: {
-    fontSize: 24,
+  headerTitle: {
+    fontSize: 32,
+    lineHeight: 36,
     fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 8,
   },
-  subtitle: {
+  headerSubtitle: {
     fontSize: 16,
-    color: '#666',
-    marginTop: 4,
+    color: '#FFFFFF',
+    opacity: 0.9,
   },
   listContainer: {
-    padding: 16,
+    paddingHorizontal: 16,
   },
-  nftCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
+  rewardCard: {
     flexDirection: 'row',
+    padding: 16,
+    borderRadius: 16,
+    marginBottom: 16,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
   },
-  nftImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 8,
+  rewardIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
   },
-  nftInfo: {
+  rewardContent: {
     flex: 1,
-    marginLeft: 16,
   },
-  nftName: {
+  rewardTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 4,
   },
-  nftDescription: {
+  rewardDescription: {
     fontSize: 14,
-    color: '#666',
-    marginTop: 4,
+    color: '#FFFFFF',
+    opacity: 0.9,
+    marginBottom: 8,
   },
-  earnedDate: {
+  rewardDate: {
     fontSize: 12,
-    color: '#999',
-    marginTop: 4,
-  },
-  trophyIcon: {
-    marginLeft: 16,
+    color: '#FFFFFF',
+    opacity: 0.7,
   },
 });

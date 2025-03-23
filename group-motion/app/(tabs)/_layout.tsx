@@ -10,35 +10,32 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colors.tint,
-        tabBarInactiveTintColor: colors.tabIconDefault,
+        headerShown: false,
         tabBarStyle: {
-          backgroundColor: colors.cardBackground,
+          backgroundColor: colors.challengeGradientStart,
           borderTopWidth: 0,
-          elevation: 20,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: -3 },
-          shadowOpacity: 0.1,
-          shadowRadius: 10,
+          elevation: 0,
+          shadowOpacity: 0,
+          height: 60,
+          paddingBottom: 8,
         },
-        headerStyle: {
-          backgroundColor: colors.background,
-        },
-        headerTitleStyle: {
-          fontWeight: 'bold',
-          fontSize: 20,
+        tabBarActiveTintColor: '#FFFFFF',
+        tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.6)',
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
         },
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Discover Challenges',
-          tabBarLabel: 'Discover',
+          title: 'Discover',
           tabBarIcon: ({ color, focused }) => (
             <FontAwesome5
-              name={focused ? 'compass' : 'compass'}
+              name="compass"
               size={24}
               color={color}
+              solid={focused}
             />
           ),
         }}
@@ -46,13 +43,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="camera"
         options={{
-          title: 'Record Challenge',
-          tabBarLabel: 'Record',
+          title: 'Record',
           tabBarIcon: ({ color, focused }) => (
             <FontAwesome5
-              name={focused ? 'camera' : 'camera'}
+              name="video"
               size={24}
               color={color}
+              solid={focused}
             />
           ),
         }}
@@ -60,13 +57,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="rewards"
         options={{
-          title: 'Your Rewards',
-          tabBarLabel: 'Rewards',
+          title: 'Rewards',
           tabBarIcon: ({ color, focused }) => (
             <FontAwesome5
-              name={focused ? 'trophy' : 'trophy'}
+              name="trophy"
               size={24}
               color={color}
+              solid={focused}
             />
           ),
         }}
@@ -74,7 +71,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="challenge"
         options={{
-          href: null, // This hides the tab but keeps the screen accessible for navigation
+          href: null,
         }}
       />
     </Tabs>

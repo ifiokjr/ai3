@@ -116,14 +116,14 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 24,
-    paddingTop: 16,
-    paddingBottom: 32,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
+    // paddingTop: 16,
+    // paddingBottom: 32,
+    borderRadius: 24,
     marginBottom: 16,
   },
   headerTitle: {
     fontSize: 32,
+    lineHeight: 36,
     fontWeight: 'bold',
     color: '#FFFFFF',
     marginBottom: 8,
