@@ -27,14 +27,14 @@ export default function DiscoverScreen() {
   const [challenges, setChallenges] = useState<Challenge[]>([
     {
       id: '1',
-      title: 'Pushup Challenge',
-      description: 'Complete 10 pushups outside London Bridge',
+      title: 'Squat Challenge',
+      description: 'Complete 10 squats outside London Bridge',
       location: {
         name: 'London Bridge',
         latitude: 51.5074,
         longitude: -0.0878,
       },
-      reward: 'Pushup Master NFT',
+      reward: 'Squat Master NFT',
       distance: 0.05, // 50 meters away
     },
     {
