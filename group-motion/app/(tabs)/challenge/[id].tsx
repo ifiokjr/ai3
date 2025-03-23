@@ -10,6 +10,7 @@ import * as Location from 'expo-location';
 import { useState, useEffect } from 'react';
 import { NFTService } from '@/services/nft';
 import { WalletService } from '@/services/wallet';
+import { TensorflowWebview } from '@/components/TensorflowWebview';
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371; // Radius of the earth in km
@@ -36,6 +37,8 @@ export default function ChallengeDetails() {
   const [currentLocation, setCurrentLocation] = useState<Location.LocationObject | null>(null);
   const [distance, setDistance] = useState<number | null>(null);
   const [isCompleting, setIsCompleting] = useState(false);
+  const [showWebview, setShowWebview] = useState(false);
+  const [isChallengeCompleted, setIsChallengeCompleted] = useState(false);
 
   // This would normally come from an API or database
   const challenges = {
@@ -104,43 +107,51 @@ export default function ChallengeDetails() {
     })();
   }, [challenge]);
 
+
+
   const handleStartChallenge = async () => {
-    try {
-      setIsCompleting(true);
+    setShowWebview(true);
+    setTimeout(() => {
+      setShowWebview(false);
+      setIsChallengeCompleted(true);
+    }, 20000);
 
-      // Get wallet address
-      const walletAddress = await WalletService.getWalletAddress();
+    // try {
+    //   setIsCompleting(true);
 
-      // Mint NFT reward
-      const nftAddress = await NFTService.mintNFT(
-        challenge.title,
-        challenge.reward
-      );
+    //   // Get wallet address
+    //   const walletAddress = await WalletService.getWalletAddress();
 
-      // Show success message
-      Alert.alert(
-        'Challenge Completed! 🎉',
-        `You've earned the ${challenge.reward} NFT!\n\nWallet: ${walletAddress}\nNFT: ${nftAddress}`,
-        [
-          {
-            text: 'View Rewards',
-            onPress: () => router.push('/rewards'),
-          },
-          {
-            text: 'Back to Challenges',
-            onPress: () => router.back(),
-          },
-        ]
-      );
-    } catch (error) {
-      console.error('Error completing challenge:', error);
-      Alert.alert(
-        'Error',
-        'Failed to complete challenge. Please try again.'
-      );
-    } finally {
-      setIsCompleting(false);
-    }
+    //   // Mint NFT reward
+    //   const nftAddress = await NFTService.mintNFT(
+    //     challenge.title,
+    //     challenge.reward
+    //   );
+
+    //   // Show success message
+    //   Alert.alert(
+    //     'Challenge Completed! 🎉',
+    //     `You've earned the ${challenge.reward} NFT!\n\nWallet: ${walletAddress}\nNFT: ${nftAddress}`,
+    //     [
+    //       {
+    //         text: 'View Rewards',
+    //         onPress: () => router.push('/rewards'),
+    //       },
+    //       {
+    //         text: 'Back to Challenges',
+    //         onPress: () => router.back(),
+    //       },
+    //     ]
+    //   );
+    // } catch (error) {
+    //   console.error('Error completing challenge:', error);
+    //   Alert.alert(
+    //     'Error',
+    //     'Failed to complete challenge. Please try again.'
+    //   );
+    // } finally {
+    //   setIsCompleting(false);
+    // }
   };
 
   if (!challenge) {
@@ -149,7 +160,8 @@ export default function ChallengeDetails() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient
+      {showWebview && !isChallengeCompleted && <TensorflowWebview />}
+      {!showWebview && !isChallengeCompleted && <LinearGradient
         colors={[colors.challengeGradientStart, colors.challengeGradientEnd]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -191,12 +203,27 @@ export default function ChallengeDetails() {
             end={{ x: 1, y: 0 }}
             style={styles.startButtonGradient}>
             <ThemedText style={styles.startButtonText}>
-              {isCompleting ? 'Completing...' : 'Complete Challenge'}
+              {isCompleting ? 'Completing...' : 'Start Challenge'}
             </ThemedText>
-            <FontAwesome5 name="check" size={16} color="#FFFFFF" />
+            {/* <FontAwesome5 name="check" size={16} color="#FFFFFF" /> */}
           </LinearGradient>
         </TouchableOpacity>
-      </LinearGradient>
+      </LinearGradient>}
+      {isChallengeCompleted && <View style={{
+        padding: 24,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: colors.challengeGradientStart,
+        margin: 16,
+        borderRadius: 24,
+      }}>
+        <ThemedText style={{
+          fontSize: 24,
+          fontWeight: 'bold',
+          color: '#FFFFFF',
+          textAlign: 'center',
+        }}>Challenge Completed!</ThemedText>
+      </View>}
     </View>
   );
 }

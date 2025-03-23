@@ -7,7 +7,7 @@ const API_KEY = "8cc83175-58e8-4800-8c02-38661ae2e5de";
 const POSETRACKER_API = "https://app.posetracker.com/pose_tracker/tracking";
 const { width, height } = Dimensions.get('window');
 
-export default function App() {
+export const TensorflowWebview = () => {
   const [poseTrackerInfos, setCurrentPoseTrackerInfos] = useState();
   const [repsCounter, setRepsCounter] = useState(0);
   const [permission, requestPermission] = useCameraPermissions();
@@ -88,16 +88,12 @@ export default function App() {
         originWhitelist={['*']}
         injectedJavaScript={jsBridge}
         onMessage={onMessage}
-        // Activer le debug pour voir les logs WebView
         debuggingEnabled={true}
-        // Permettre les communications mixtes HTTP/HTTPS si nécessaire
         mixedContentMode="compatibility"
-        // Ajouter un gestionnaire d'erreurs
         onError={(syntheticEvent) => {
           const { nativeEvent } = syntheticEvent;
           console.warn('WebView error:', nativeEvent);
         }}
-        // Ajouter un gestionnaire pour les erreurs de chargement
         onLoadingError={(syntheticEvent) => {
           const { nativeEvent } = syntheticEvent;
           console.warn('WebView loading error:', nativeEvent);
