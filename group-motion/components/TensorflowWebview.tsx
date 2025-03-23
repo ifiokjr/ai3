@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, NativeSyntheticEvent } from 'react-native';
 import WebView, { WebViewMessageEvent } from 'react-native-webview';
 import { Camera, useCameraPermissions } from 'expo-camera';
 
@@ -20,6 +20,11 @@ interface PoseTrackerInfo {
 interface CounterInfo {
   type: 'counter';
   current_count: number;
+}
+
+interface WebViewErrorEvent {
+  code: number;
+  description: string;
 }
 
 type WebViewInfo = PoseTrackerInfo | CounterInfo;
@@ -113,11 +118,11 @@ export const TensorflowWebview: React.FC<TensorflowWebviewProps> = ({
         onMessage={onMessage}
         debuggingEnabled={true}
         mixedContentMode="compatibility"
-        onError={(syntheticEvent) => {
-          console.warn('WebView error:', syntheticEvent.nativeEvent);
+        onError={(event: NativeSyntheticEvent<WebViewErrorEvent>) => {
+          console.warn('WebView error:', event.nativeEvent);
         }}
-        onLoadingError={(syntheticEvent) => {
-          console.warn('WebView loading error:', syntheticEvent.nativeEvent);
+        onLoadingError={(event: NativeSyntheticEvent<WebViewErrorEvent>) => {
+          console.warn('WebView loading error:', event.nativeEvent);
         }}
       />
       <View style={styles.infoContainer}>
