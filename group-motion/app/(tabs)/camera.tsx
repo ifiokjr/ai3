@@ -1,23 +1,22 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { Camera } from 'expo-camera';
+import { CameraView, Camera } from 'expo-camera';
 import { useEffect, useState, useRef } from 'react';
-import * as tf from '@tensorflow/tfjs-react-native';
-import { bundleResourceIO } from '@tensorflow/tfjs-react-native';
+// import * as tf from '@tensorflow/tfjs-react-native';
 
 export default function CameraScreen() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [isRecording, setIsRecording] = useState(false);
-  const cameraRef = useRef<Camera>(null);
-  const [model, setModel] = useState<tf.LayersModel | null>(null);
+  const cameraRef = useRef<any>(null);
+  const [model, setModel] = useState<any | null>(null);
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === 'granted');
 
-      // Initialize TensorFlow.js
-      await tf.ready();
-      await tf.setBackend('rn-webgl');
+      // // Initialize TensorFlow.js
+      // await tf.ready();
+      // await tf.setBackend('rn-webgl');
 
       // Load the model (you'll need to add your model files)
       // const modelJson = require('../assets/model/model.json');
@@ -52,10 +51,10 @@ export default function CameraScreen() {
 
   return (
     <View style={styles.container}>
-      <Camera
+      <CameraView
         ref={cameraRef}
         style={styles.camera}
-        type={Camera.Constants.Type.back}
+        // type={Camera.Constants.Type.back}
       >
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -67,7 +66,7 @@ export default function CameraScreen() {
             </Text>
           </TouchableOpacity>
         </View>
-      </Camera>
+      </CameraView>
     </View>
   );
 }

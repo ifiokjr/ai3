@@ -35,7 +35,7 @@ export default function DiscoverScreen() {
         longitude: -0.0878,
       },
       reward: 'Pushup Master NFT',
-      distance: 0.5,
+      distance: 0.05, // 50 meters away
     },
     {
       id: '2',
@@ -47,7 +47,7 @@ export default function DiscoverScreen() {
         longitude: -0.0367,
       },
       reward: 'Kindness Champion NFT',
-      distance: 1.2,
+      distance: 0.08, // 80 meters away
     },
     {
       id: '3',
@@ -86,7 +86,7 @@ export default function DiscoverScreen() {
             colors={['#6C5CE7', '#45AAF2']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={styles.header}>
+            style={[styles.header]}>
             <ThemedText style={styles.headerTitle}>Daily Challenges</ThemedText>
             <ThemedText style={styles.headerSubtitle}>Complete challenges to earn rewards!</ThemedText>
           </LinearGradient>
@@ -116,7 +116,8 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 24,
-    paddingTop: 24,
+    paddingTop: 16,
+    paddingBottom: 32,
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
     marginBottom: 16,

@@ -3,7 +3,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from 'react-native';
 
-export default function TabsLayout() {
+export default function TabLayout() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
 
@@ -13,9 +13,6 @@ export default function TabsLayout() {
         tabBarActiveTintColor: colors.tint,
         tabBarInactiveTintColor: colors.tabIconDefault,
         tabBarStyle: {
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 8,
           backgroundColor: colors.cardBackground,
           borderTopWidth: 0,
           elevation: 20,
@@ -26,39 +23,58 @@ export default function TabsLayout() {
         },
         headerStyle: {
           backgroundColor: colors.background,
-          elevation: 0,
-          shadowOpacity: 0,
         },
         headerTitleStyle: {
           fontWeight: 'bold',
-          fontSize: 24,
+          fontSize: 20,
         },
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Discover',
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome5 name="compass" size={size} color={color} />
+          title: 'Discover Challenges',
+          tabBarLabel: 'Discover',
+          tabBarIcon: ({ color, focused }) => (
+            <FontAwesome5
+              name={focused ? 'compass' : 'compass'}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
       <Tabs.Screen
         name="camera"
         options={{
-          title: 'Record',
-          tabBarIcon: ({ color }) => (
-            <FontAwesome5 name="camera" size={24} color={color} />
+          title: 'Record Challenge',
+          tabBarLabel: 'Record',
+          tabBarIcon: ({ color, focused }) => (
+            <FontAwesome5
+              name={focused ? 'camera' : 'camera'}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
       <Tabs.Screen
         name="rewards"
         options={{
-          title: 'Rewards',
-          tabBarIcon: ({ color }) => (
-            <FontAwesome5 name="trophy" size={24} color={color} />
+          title: 'Your Rewards',
+          tabBarLabel: 'Rewards',
+          tabBarIcon: ({ color, focused }) => (
+            <FontAwesome5
+              name={focused ? 'trophy' : 'trophy'}
+              size={24}
+              color={color}
+            />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="challenge"
+        options={{
+          href: null, // This hides the tab but keeps the screen accessible for navigation
         }}
       />
     </Tabs>

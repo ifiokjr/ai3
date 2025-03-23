@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -8,6 +8,8 @@ import { useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Location from 'expo-location';
 import { useState, useEffect } from 'react';
+import { NFTService } from '@/services/nft';
+import { WalletService } from '@/services/wallet';
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371; // Radius of the earth in km
@@ -33,21 +35,54 @@ export default function ChallengeDetails() {
   const insets = useSafeAreaInsets();
   const [currentLocation, setCurrentLocation] = useState<Location.LocationObject | null>(null);
   const [distance, setDistance] = useState<number | null>(null);
+  const [isCompleting, setIsCompleting] = useState(false);
 
   // This would normally come from an API or database
-  const challenge = {
-    id: '1',
-    title: 'Pushup Challenge',
-    description: 'Complete 10 pushups outside London Bridge',
-    location: {
-      name: 'London Bridge',
-      latitude: 51.5074,
-      longitude: -0.0878,
+  const challenges = {
+    '1': {
+      id: '1',
+      title: 'Pushup Challenge',
+      description: 'Complete 10 pushups outside London Bridge',
+      location: {
+        name: 'London Bridge',
+        latitude: 51.5074,
+        longitude: -0.0878,
+      },
+      reward: 'Pushup Master NFT',
     },
-    reward: 'Pushup Master NFT',
+    '2': {
+      id: '2',
+      title: 'Kindness Challenge',
+      description: 'Compliment 10 people outside New Cross',
+      location: {
+        name: 'New Cross',
+        latitude: 51.4767,
+        longitude: -0.0367,
+      },
+      reward: 'Kindness Champion NFT',
+    },
+    '3': {
+      id: '3',
+      title: 'High Five Challenge',
+      description: 'High five 5 people at Heathrow Airport',
+      location: {
+        name: 'Heathrow Airport',
+        latitude: 51.4700,
+        longitude: -0.4543,
+      },
+      reward: 'Social Butterfly NFT',
+    },
   };
 
+  const challenge = challenges[id as keyof typeof challenges];
+
   useEffect(() => {
+    if (!challenge) {
+      // If challenge not found, go back to discover screen
+      router.replace('/');
+      return;
+    }
+
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -67,24 +102,58 @@ export default function ChallengeDetails() {
         setDistance(dist);
       }
     })();
-  }, []);
+  }, [challenge]);
+
+  const handleStartChallenge = async () => {
+    try {
+      setIsCompleting(true);
+
+      // Get wallet address
+      const walletAddress = await WalletService.getWalletAddress();
+
+      // Mint NFT reward
+      const nftAddress = await NFTService.mintNFT(
+        challenge.title,
+        challenge.reward
+      );
+
+      // Show success message
+      Alert.alert(
+        'Challenge Completed! 🎉',
+        `You've earned the ${challenge.reward} NFT!\n\nWallet: ${walletAddress}\nNFT: ${nftAddress}`,
+        [
+          {
+            text: 'View Rewards',
+            onPress: () => router.push('/rewards'),
+          },
+          {
+            text: 'Back to Challenges',
+            onPress: () => router.back(),
+          },
+        ]
+      );
+    } catch (error) {
+      console.error('Error completing challenge:', error);
+      Alert.alert(
+        'Error',
+        'Failed to complete challenge. Please try again.'
+      );
+    } finally {
+      setIsCompleting(false);
+    }
+  };
+
+  if (!challenge) {
+    return null;
+  }
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={styles.container}>
       <LinearGradient
         colors={[colors.challengeGradientStart, colors.challengeGradientEnd]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.content}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <FontAwesome5 name="arrow-left" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-          <View style={styles.trophyContainer}>
-            <FontAwesome5 name="trophy" size={24} color="#FFD700" />
-          </View>
-        </View>
-
         <View style={styles.challengeInfo}>
           <ThemedText style={styles.title}>{challenge.title}</ThemedText>
           <ThemedText style={styles.description}>{challenge.description}</ThemedText>
@@ -112,22 +181,19 @@ export default function ChallengeDetails() {
         <TouchableOpacity
           style={[
             styles.startButton,
-            { opacity: distance && distance <= 0.1 ? 1 : 0.5 }
+            { opacity: isCompleting ? 0.5 : 1 }
           ]}
-          disabled={!distance || distance > 0.1}
-          onPress={() => {
-            // Handle starting the challenge
-            router.push('/challenge/recording');
-          }}>
+          disabled={isCompleting}
+          onPress={handleStartChallenge}>
           <LinearGradient
             colors={['#4CAF50', '#45AAF2']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.startButtonGradient}>
             <ThemedText style={styles.startButtonText}>
-              {distance && distance <= 0.1 ? 'Start Challenge' : 'Get Closer to Start'}
+              {isCompleting ? 'Completing...' : 'Complete Challenge'}
             </ThemedText>
-            <FontAwesome5 name="play" size={16} color="#FFFFFF" />
+            <FontAwesome5 name="check" size={16} color="#FFFFFF" />
           </LinearGradient>
         </TouchableOpacity>
       </LinearGradient>
@@ -142,28 +208,16 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    borderRadius: 24,
     margin: 16,
     padding: 24,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  backButton: {
-    padding: 8,
-  },
-  trophyContainer: {
-    padding: 8,
+    borderRadius: 24,
   },
   challengeInfo: {
     flex: 1,
     gap: 24,
   },
   title: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: 'bold',
     color: '#FFFFFF',
   },
