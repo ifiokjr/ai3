@@ -1,10 +1,12 @@
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
-import { useColorScheme } from 'react-native';
+import { TouchableOpacity, useColorScheme } from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function ChallengeLayout() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
+  const router = useRouter();
 
   return (
     <Stack
@@ -23,13 +25,22 @@ export default function ChallengeLayout() {
           fontWeight: 'bold',
         },
         headerTintColor: '#FFFFFF',
-        headerBackTitleVisible: false,
       }}>
       <Stack.Screen
         name="[id]"
         options={{
           title: 'Challenge Details',
-          headerBackTitle: 'Back',
+          // headerBackTitle: 'Back',
+          // headerBackButtonMenuEnabled: true,
+          headerLeft: (props) => {
+            if (props.canGoBack) {
+              return (
+                <TouchableOpacity onPress={() => router.back()}>
+                  <FontAwesome5 name="chevron-left" size={20} color="#FFFFFF" />
+                </TouchableOpacity>
+              );
+            }
+          },
         }}
       />
       <Stack.Screen
