@@ -1,21 +1,27 @@
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const tintColorLight = '#6C5CE7';
+const tintColorDark = '#A3A1FF';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
+    text: '#2D3436',
+    background: '#F8F9FE',
     tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
+    icon: '#6C5CE7',
+    tabIconDefault: '#A0A0A0',
     tabIconSelected: tintColorLight,
+    cardBackground: '#FFFFFF',
+    challengeGradientStart: '#6C5CE7',
+    challengeGradientEnd: '#45AAF2',
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
+    text: '#FFFFFF',
+    background: '#1E1E2E',
     tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
+    icon: '#A3A1FF',
+    tabIconDefault: '#666666',
     tabIconSelected: tintColorDark,
+    cardBackground: '#2D2D44',
+    challengeGradientStart: '#6C5CE7',
+    challengeGradientEnd: '#45AAF2',
   },
 };

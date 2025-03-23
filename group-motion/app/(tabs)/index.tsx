@@ -1,7 +1,12 @@
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, FlatList, StyleSheet } from 'react-native';
 import { useEffect, useState } from 'react';
 import * as Location from 'expo-location';
-import { FontAwesome } from '@expo/vector-icons';
+import { ChallengeCard } from '@/components/ChallengeCard';
+import { LinearGradient } from 'expo-linear-gradient';
+import { ThemedText } from '@/components/ThemedText';
+import { Colors } from '@/constants/Colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 
 interface Challenge {
   id: string;
@@ -17,6 +22,8 @@ interface Challenge {
 }
 
 export default function DiscoverScreen() {
+  const insets = useSafeAreaInsets();
+  const router = useRouter();
   const [challenges, setChallenges] = useState<Challenge[]>([
     {
       id: '1',
@@ -70,29 +77,33 @@ export default function DiscoverScreen() {
     })();
   }, []);
 
-  const renderChallenge = ({ item }: { item: Challenge }) => (
-    <TouchableOpacity style={styles.challengeCard}>
-      <View style={styles.challengeHeader}>
-        <Text style={styles.challengeTitle}>{item.title}</Text>
-        <FontAwesome name="trophy" size={20} color="#FFD700" />
-      </View>
-      <Text style={styles.challengeDescription}>{item.description}</Text>
-      <View style={styles.challengeFooter}>
-        <Text style={styles.locationText}>
-          <FontAwesome name="map-marker" size={16} color="#666" /> {item.location.name}
-        </Text>
-        <Text style={styles.distanceText}>{item.distance} km away</Text>
-      </View>
-    </TouchableOpacity>
-  );
-
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <FlatList
         data={challenges}
-        renderItem={renderChallenge}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
+        ListHeaderComponent={() => (
+          <LinearGradient
+            colors={['#6C5CE7', '#45AAF2']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.header}>
+            <ThemedText style={styles.headerTitle}>Daily Challenges</ThemedText>
+            <ThemedText style={styles.headerSubtitle}>Complete challenges to earn rewards!</ThemedText>
+          </LinearGradient>
+        )}
+        renderItem={({ item }) => (
+          <ChallengeCard
+            challenge={item}
+            onPress={() => {
+              router.push(`/challenge/${item.id}`);
+            }}
+          />
+        )}
+        contentContainerStyle={[
+          styles.listContainer,
+          { paddingBottom: insets.bottom + 90 } // Add extra padding for tab bar
+        ]}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
@@ -101,51 +112,27 @@ export default function DiscoverScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: Colors.light.background,
   },
-  listContainer: {
-    padding: 16,
-  },
-  challengeCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
+  header: {
+    padding: 24,
+    paddingTop: 24,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
     marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
   },
-  challengeHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  headerTitle: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
     marginBottom: 8,
   },
-  challengeTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+  headerSubtitle: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    opacity: 0.9,
   },
-  challengeDescription: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 12,
-  },
-  challengeFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  locationText: {
-    fontSize: 14,
-    color: '#666',
-  },
-  distanceText: {
-    fontSize: 14,
-    color: '#007AFF',
+  listContainer: {
+    paddingHorizontal: 16,
   },
 });
