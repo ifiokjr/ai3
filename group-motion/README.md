@@ -31,7 +31,6 @@ Group Motion is an MVP for a location-based challenges app that encourages socia
 - Built with Expo and React Native
 - Uses TensorFlow.js for motion detection
 - Implements location services for challenge discovery
-- Features a modern UI with Tamagui components
 
 ## Getting Started
 
@@ -58,7 +57,6 @@ The project uses file-based routing with the Expo Router. Main development files
 
 - [Expo Documentation](https://docs.expo.dev/)
 - [TensorFlow.js Documentation](https://www.tensorflow.org/js)
-- [Tamagui Documentation](https://tamagui.dev/)
 
 ## Join the Community
 
