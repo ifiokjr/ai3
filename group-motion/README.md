@@ -1,50 +1,66 @@
-# Welcome to your Expo app 👋
+# Group Motion - Location-Based Challenge App 🎯
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A mobile application that turns real-world locations into interactive challenge zones where users can complete various motion-based tasks and earn rewards.
 
-## Get started
+## Overview
 
-1. Install dependencies
+Group Motion is an MVP for a location-based challenges app that encourages social interaction and physical activity through gamified challenges at specific locations. The app combines real-world locations with motion detection technology to create an engaging experience.
 
+## Features
+
+- **Location-Based Challenges**: Find and complete challenges at specific locations
+- **Motion Detection**: Uses device camera and TensorFlow.js to detect and validate challenge completion
+- **Social Gaming**: Best played in pairs where one person films while the other performs the challenge
+- **Reward System**: Earn NFT rewards for completing challenges
+- **Real-World Examples**:
+  - 10 pushups outside London Bridge
+  - Compliment 10 people outside New Cross
+  - High five 5 people at Heathrow Airport
+
+## How It Works
+
+1. **Find Challenges**: Browse nearby challenges based on your location
+2. **Team Up**: The app is designed for pair play:
+   - One person films the challenge
+   - The other person performs the required motion
+3. **Complete Challenges**: Use the device camera to validate motion completion
+4. **Earn Rewards**: Both participants receive NFT rewards upon successful completion
+
+## Technical Stack
+
+- Built with Expo and React Native
+- Uses TensorFlow.js for motion detection
+- Implements location services for challenge discovery
+- Features a modern UI with Tamagui components
+
+## Getting Started
+
+1. Install dependencies:
    ```bash
-   npm install
+   pnpm install
    ```
 
-2. Start the app
-
+2. Start the app:
    ```bash
-    npx expo start
+   pnpm start
    ```
 
-In the output, you'll find options to open the app in a
+3. Open the app in:
+   - iOS Simulator
+   - Android Emulator
+   - Expo Go on your physical device
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Development
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+The project uses file-based routing with the Expo Router. Main development files are located in the **app** directory.
 
-## Get a fresh project
+## Learn More
 
-When you're ready, run:
+- [Expo Documentation](https://docs.expo.dev/)
+- [TensorFlow.js Documentation](https://www.tensorflow.org/js)
+- [Tamagui Documentation](https://tamagui.dev/)
 
-```bash
-npm run reset-project
-```
+## Join the Community
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- [Expo on GitHub](https://github.com/expo/expo)
+- [Discord Community](https://chat.expo.dev)
