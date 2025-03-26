@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "expo": "^52.0.40",
+    "expo-image-picker": "^16.0.6",
+    "react-native-mlkit-pose-detection": "^0.1.8",
+    "react-native-native-video": "^0.2.23",
+    "react-native-reanimated": "^3.17.1"
+  }
+}

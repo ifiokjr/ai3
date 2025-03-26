@@ -7,6 +7,12 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import React from 'react';
+import {  ScrollView, Image } from 'react-native';
+import { Text, Card, Button, Icon } from '@rneui/themed';
+
+
+
 
 interface Challenge {
   id: string;
@@ -60,6 +66,17 @@ export default function DiscoverScreen() {
       },
       reward: 'Social Butterfly NFT',
       distance: 15.8,
+    },{
+      id: '4',
+      title: 'High Five Challenge',
+      description: 'High five 5 people at Heathrow Airport',
+      location: {
+        name: 'Heathrow Airport',
+        latitude: 51.4700,
+        longitude: -0.4543,
+      },
+      reward: 'Social Butterfly NFT',
+      distance: 15.8,
     },
   ]);
 
@@ -103,8 +120,11 @@ export default function DiscoverScreen() {
           styles.listContainer,
           { paddingBottom: insets.bottom + 90 } // Add extra padding for tab bar
         ]}
+        
         showsVerticalScrollIndicator={false}
       />
+    
+
     </View>
   );
 }
